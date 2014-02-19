@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
+		<script src="https://www.google.com/jsapi"></script>
+		<script src="drawChart.js"></script>
+		
+
+		<script>
+			google.load("visualization", "1", {
+				packages : ["corechart"]
+			});
+
+			var polygon;
+			var map;
+			var markers = new Array();
+			var p1 = new google.maps.LatLng(37.785910776551354, -122.310791015625);
+			var builtflag = new Boolean();
+			builtflag = false;
+
+			google.maps.event.addDomListener(window, 'load', initialize);
+
+			function initialize() {
+				var mapProp = {
+					center : p1,
+					zoom : 4,
+					mapTypeId : google.maps.MapTypeId.ROADMAP
+				};
+
+				map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+				//2: Add the click event listener for the marker.
+				google.maps.event.addListener(map, 'click', function(e) {
+					placeMyMarker(e.latLng, map);
+				});
+			}
+
+			//add the marker to the map.
+			function placeMyMarker(position, map) {
+				
+				var marker = new google.maps.Marker({
+					position : position,
+					map : map
+				});
+
+				markers[markers.length] = marker;
+			}
+
+			function cleanPolygon() {
+				for (var i = 0; i < markers.length; i++) {
+					markers[i].setMap(null);
+				}
+				markers.length = 0;
+				polygon.setMap(null);
+				builtflag = false;
+			}
+
+			function buildPolygon() {
+				if (builtflag == true)
+					return;
+
+				var boundary = new Array();
+				for (var i = 0; i < 2; i++) {
+					boundary[i] = markers[i].position;
+				}
+				
+				  document.getElementById("point1").value = markers[0].position;
+				  document.getElementById("point2").value = markers[1].position;
+
+				polygon = new google.maps.Rectangle({
+					bounds : new google.maps.LatLngBounds(markers[0].position, markers[1].position)
+				});
+
+				polygon.setMap(map);
+
+				builtflag = true;
+			}
+
+
+		</script>
+	</head>
+
+	<body>
+		<div>
+			<input onclick="cleanPolygon();" type=button value="Remove Polygon">
+			<input onclick="buildPolygon();" type=button value="Build Polygon">
+		</div>
+		<div id="googleMap" style = "width:800px;height:640px;"></div>
+		<form action="visual.jsp" method="GET">
+		  point1: <input type="text" id="point1" name="point1"><br>
+		  point2: <input type="text" id="point2" name="point2"><br>
+		  submit: <input type="submit" name="Submit">
+		</form>
+	</body>
+</html>
