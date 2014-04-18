@@ -20,12 +20,11 @@
 	};
 	xmlhttp.open("GET", "getStatic.jsp?point1="+"<%=request.getParameter("point1")%>" + "&" + "point2=" + "<%=request.getParameter("point2")%>", true);
 	xmlhttp.send();
-	
-	
 </script>
 </head>
 
 <body>
 	<div id="chart_div"></div>
+	<div id="json_div"></div>
 </body>
 </html>

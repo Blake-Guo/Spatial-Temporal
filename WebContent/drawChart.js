@@ -17,7 +17,13 @@ function drawChart(jsonStr,d,h) {
 		for (var i = 0; i < d; i++)
 			for (var j = 0; j < h; j++) {
 				data.setValue(i * h + j, 0, i + "d:" + j + "h");
-				data.setValue(i * h + j, 1, parseInt(jsonObj[i][j]));
+				if(jsonObj[i][j] == null)//not pretty sure about this!!!!!!
+				{
+					data.setValue(i * h + j, 1, 0);
+				}
+				else{
+					data.setValue(i * h + j, 1, parseInt(jsonObj[i][j]));	
+				}
 			}
 
 		var options = {
@@ -43,4 +49,7 @@ function drawChart(jsonStr,d,h) {
 
 		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 		chart.draw(data, options);
+		
+		//Output the json, just for test.
+		document.getElementById('json_div').innerHTML = jsonStr;
 	}

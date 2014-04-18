@@ -56,7 +56,7 @@
 			String preSql = "select extract(dow from time at time zone 'PDT') as dow, extract(hour from time at time zone 'PDT') as hour, count(*) as number" +
 					" from sfgeotwitters" +
 					" where extract(month from time at time zone 'PDT')=9" +
-					" and extract(day from time at time zone 'PDT')>=12 and extract(day from time at time zone 'PDT')<=18 and" +
+					" and extract(day from time at time zone 'PDT')>=9 and extract(day from time at time zone 'PDT')<=15 and" +
 					" ST_Contains( ST_GeomFromText('POLYGON((";
 					
 			String postSql = "))',4326), geolonlat)" +

@@ -3,7 +3,6 @@
 		<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDY0kkJiTPVd2U7aTOAwhc9ySH6oHxOIYM&sensor=false"></script>
 		<script src="https://www.google.com/jsapi"></script>
 		<script src="drawChart.js"></script>
-		
 
 		<script>
 			google.load("visualization", "1", {
@@ -36,7 +35,7 @@
 
 			//add the marker to the map.
 			function placeMyMarker(position, map) {
-				
+
 				var marker = new google.maps.Marker({
 					position : position,
 					map : map
@@ -53,42 +52,79 @@
 				polygon.setMap(null);
 				builtflag = false;
 			}
+			
+			function stringToLatLon(positionStr)
+			{
+			    var posstr = positionStr.substring(1,positionStr.length-1);
+				var strs = posstr.split(",");
+				var la = parseFloat(strs[0]);
+				var ln = parseFloat(strs[1]);
+				var latlon =new google.maps.LatLng(la, ln);
+				
+				return latlon;
+			}
 
-			function buildPolygon() {
+			function buildPolygon(param) {
 				if (builtflag == true)
 					return;
-
+					
+					
 				var boundary = new Array();
-				for (var i = 0; i < 2; i++) {
-					boundary[i] = markers[i].position;
+				
+				if (param == 'mark') {
+					for (var i = 0; i < 2; i++) {
+						boundary[i] = markers[i].position;
+					}
+				} 
+				
+				else if (param == 'input') {
+					boundary[0] = stringToLatLon(document.getElementById("southwest").value);
+					boundary[1] = stringToLatLon(document.getElementById("northeast").value);
 				}
 				
-				  document.getElementById("point1").value = markers[0].position;
-				  document.getElementById("point2").value = markers[1].position;
+				document.getElementById("point1").value = boundary[0];
+				document.getElementById("point2").value = boundary[1];
 
 				polygon = new google.maps.Rectangle({
-					bounds : new google.maps.LatLngBounds(markers[0].position, markers[1].position)
+					bounds : new google.maps.LatLngBounds(boundary[0], boundary[1])
 				});
 
 				polygon.setMap(map);
+				if(param == 'input')//set the map view to the center of the boundary
+				{
+					map.setCenter(boundary[0]);
+					map.setZoom(13);
+				}
 
 				builtflag = true;
 			}
-
 
 		</script>
 	</head>
 
 	<body>
 		<div>
-			<input onclick="cleanPolygon();" type=button value="Remove Polygon">
-			<input onclick="buildPolygon();" type=button value="Build Polygon">
+			<input onclick="buildPolygon('mark')" type="button" value="Build Polygon From Marks">
+			<br>
+			<input onclick="buildPolygon('input')" type="button" value="Build Polygon From BBox Input">
+			southwest:
+			<input type="text" id="southwest" name="southwest">
+			northeast:
+			<input type="text" id="northeast" name="northeast">
+			<br>
+			<input onclick="cleanPolygon();" type="button" value="Remove Polygon">
+
 		</div>
 		<div id="googleMap" style = "width:800px;height:640px;"></div>
 		<form action="visual.jsp" method="GET">
-		  point1: <input type="text" id="point1" name="point1"><br>
-		  point2: <input type="text" id="point2" name="point2"><br>
-		  submit: <input type="submit" name="Submit">
+			point1:
+			<input type="text" id="point1" name="point1">
+			<br>
+			point2:
+			<input type="text" id="point2" name="point2">
+			<br>
+			submit:
+			<input type="submit" name="Submit">
 		</form>
 	</body>
 </html>
