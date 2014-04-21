@@ -15,16 +15,27 @@
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var jsonRes = xmlhttp.responseText;
-			drawChart(jsonRes, 7, 24);
+			drawChart(jsonRes, 2);
 		}
 	};
-	xmlhttp.open("GET", "getStatic.jsp?point1="+"<%=request.getParameter("point1")%>" + "&" + "point2=" + "<%=request.getParameter("point2")%>", true);
+	
+	var url = "";
+	
+	var url = "getStatic.jsp?point1=";
+	url += "<%=request.getParameter("point1")%>";
+	url += "&point2=";
+	url += "<%=request.getParameter("point2")%>";
+	url += "&city=";
+	url += "<%=request.getParameter("selectedCity")%>";
+			
+	xmlhttp.open("GET", url , true);
 	xmlhttp.send();
 </script>
 </head>
 
 <body>
-	<div id="chart_div"></div>
-	<div id="json_div"></div>
+	<div id="chart1_div"></div>
+	<div id="chart2_div"></div>
+	<div id="chart3_div"></div>
 </body>
 </html>

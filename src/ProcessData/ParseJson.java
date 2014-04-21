@@ -538,7 +538,7 @@ public class ParseJson {
 						+ glonlatVal + "," + geompointVal;
 				String sql = "insert into "
 						+ tableName
-						+ "(twitterId, userid, time, text, url, latitude, longitude, geolonlat, geompoint)"
+						+ "(twitterid, userid, time, text, url, latitude, longitude, geolonlat, geompoint)"
 						+ " values(" + val + ")";
 				
 				//System.out.println(sql);

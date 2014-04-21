@@ -9,10 +9,12 @@
 				packages : ["corechart"]
 			});
 
+
+            var selectedCity = "San Francisco";
 			var polygon;
 			var map;
 			var markers = new Array();
-			var p1 = new google.maps.LatLng(37.785910776551354, -122.310791015625);
+			var p1 = new google.maps.LatLng(37.744534, -122.434768);
 			var builtflag = new Boolean();
 			builtflag = false;
 
@@ -21,7 +23,7 @@
 			function initialize() {
 				var mapProp = {
 					center : p1,
-					zoom : 4,
+					zoom : 10,
 					mapTypeId : google.maps.MapTypeId.ROADMAP
 				};
 
@@ -84,6 +86,7 @@
 				
 				document.getElementById("point1").value = boundary[0];
 				document.getElementById("point2").value = boundary[1];
+				document.getElementById("selectedCity").value = selectedCity;
 
 				polygon = new google.maps.Rectangle({
 					bounds : new google.maps.LatLngBounds(boundary[0], boundary[1])
@@ -98,31 +101,81 @@
 
 				builtflag = true;
 			}
+			
+			function selectCity(){
+				var sList = document.getElementById("cityList");
+				selectedCity = sList.options[sList.selectedIndex].text;
+				
+				if(selectedCity == "Pittsburgh"){
+					var pittCenter = new google.maps.LatLng(40.451523, -79.937240);
+					map.setCenter(pittCenter);
+					map.setZoom(11);
+				}
+				
+				else if(selectedCity == "San Francisco"){
+					var sfCenter = new google.maps.LatLng(37.744534, -122.434768);
+					map.setCenter(sfCenter);
+					map.setZoom(11);
+				}
+				
+				else if(selectedCity == "New York"){
+					var nyCenter = new google.maps.LatLng(40.690013, -73.973884);
+					map.setCenter(nyCenter);
+					map.setZoom(11);
+				}
+			}
 
 		</script>
 	</head>
 
 	<body>
 		<div>
-			<input onclick="buildPolygon('mark')" type="button" value="Build Polygon From Marks">
+			City:
+			<select id="cityList" onchange="selectCity()">
+				<option value="sf" selected>San Francisco</option>
+				<option value="pitt"> Pittsburgh </option>
+				<option value="ny"> New York </option>
+			</select>
 			<br>
-			<input onclick="buildPolygon('input')" type="button" value="Build Polygon From BBox Input">
-			southwest:
+			
+			Started visual monday:<br>
+			month: <input type="text" id="month" value=9>
+			year:<input type="text" id="year" value=2013>
+			<br>
+			
+			Boundary:
+			<br>
+			<input onclick="buildPolygon('input')" type="button" style="width:220px" value="Build Polygon From BBox Input">
+			sw:
 			<input type="text" id="southwest" name="southwest">
-			northeast:
+			ne:
 			<input type="text" id="northeast" name="northeast">
 			<br>
-			<input onclick="cleanPolygon();" type="button" value="Remove Polygon">
-
-		</div>
-		<div id="googleMap" style = "width:800px;height:640px;"></div>
-		<form action="visual.jsp" method="GET">
-			point1:
-			<input type="text" id="point1" name="point1">
+			<input onclick="buildPolygon('mark')" type="button" style="width:220px" value="Build Polygon From Marks">
 			<br>
-			point2:
+			<input onclick="cleanPolygon();" type="button" style="width:220px" value="Remove Polygon">
+			<br>
+		</div>
+	
+		<div id="googleMap" style = "width:90%;height:60%;"></div>
+		<form action="visual.jsp" method="GET">
+			selcted params:
+			<br>
+			city:
+			<input type="text" id="selectedCity" name="selectedCity">
+			<br>
+			month:
+			<input type="text" id="selectedMonth">
+			year:
+			<input type="text" id="selectedYear">
+			<br>
+			
+			sw:
+			<input type="text" id="point1" name="point1">
+			ne:
 			<input type="text" id="point2" name="point2">
 			<br>
+			
 			submit:
 			<input type="submit" name="Submit">
 		</form>

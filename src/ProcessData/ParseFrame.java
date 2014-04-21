@@ -10,6 +10,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
+/**
+ * This class is mainly for parsing the pittsburgh data from Ke Zhang.
+ * @author hadoop
+ *
+ */
 public class ParseFrame {
 	
 	public static Connection ConnectDatabase() {
