@@ -19,7 +19,6 @@ public class TwitterRecorder {
 		gPoint = new GeoPoint();
 	}
 	
-	
 	public void SetTwitterId(String id)
 	{
 		this.twitterId = id;
